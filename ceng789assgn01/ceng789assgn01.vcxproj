@@ -92,6 +92,9 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Painter.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\bunny_with_holes.off" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
