@@ -47,6 +47,8 @@ public:
 	int addVertex(float* coords);
 	void addTriangle(int v1i, int v2i, int v3i);
 	void removeTriangle(int v1i, int v2i, int v3i);
+	bool triangleExists(int v1i, int v2i, int v3i);
+	void splitTriangle(int idx);
 	bool makeVertsNeighbors(int v, int w);
 	bool makeVertsUnneighbors(int v, int w);
 	void addEdge(int a, int b);

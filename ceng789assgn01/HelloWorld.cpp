@@ -31,8 +31,29 @@ int main(int, char ** argv)
 	Mesh * m = new Mesh();
 	m->loadOff(filename);
 
-	HoleFiller hFiller(*m);
-	hFiller.fillHoles();
+	/*HoleFiller hFiller(*m);
+	hFiller.fillHoles();*/
+
+	for (int i = 10; i < 11; i++) {
+
+		//m->splitTriangle(i);
+
+		//Triangle *tri = m->tris[i];
+
+		float coord_centroid[3] = {
+			(m->verts[m->tris[i]->v1i]->coords[0] + m->verts[m->tris[i]->v2i]->coords[0] + m->verts[m->tris[i]->v3i]->coords[0]) / 3,
+			(m->verts[m->tris[i]->v1i]->coords[1] + m->verts[m->tris[i]->v2i]->coords[1] + m->verts[m->tris[i]->v3i]->coords[1]) / 3,
+			(m->verts[m->tris[i]->v1i]->coords[2] + m->verts[m->tris[i]->v2i]->coords[2] + m->verts[m->tris[i]->v3i]->coords[2]) / 3 };
+
+		int idx_centroid = m->addVertex(coord_centroid);
+
+		m->removeTriangle(m->verts[m->tris[i]->v1i]->idx, m->verts[m->tris[i]->v2i]->idx, m->verts[m->tris[i]->v3i]->idx);
+
+		m->addTriangle(m->verts[m->tris[i]->v3i]->idx, idx_centroid, m->verts[m->tris[i]->v1i]->idx);
+		m->addTriangle(m->verts[m->tris[i]->v3i]->idx, idx_centroid, m->verts[m->tris[i]->v2i]->idx);
+		m->addTriangle(m->verts[m->tris[i]->v1i]->idx, idx_centroid, m->verts[m->tris[i]->v2i]->idx);
+	}
+
 
 	Painter* painter = new Painter();
 	generalShape = painter->getShapeSep(m);

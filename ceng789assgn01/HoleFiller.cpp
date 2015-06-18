@@ -113,6 +113,9 @@ void HoleFiller::trianglulateHoles()
 
 void HoleFiller::refine(int idx1 , int idx2 ,int idx3)
 {
+	if (!mesh->triangleExists(idx1, idx2, idx3))
+		return;
+
 	Vertex *v1 =  mesh->verts[idx1];
 	Vertex *v2 =  mesh->verts[idx2];
 	Vertex *v3 =  mesh->verts[idx3];
@@ -121,12 +124,9 @@ void HoleFiller::refine(int idx1 , int idx2 ,int idx3)
 	float *coord2 = v2->coords;
 	float *coord3 = v3->coords;
 
-	float coord_centroid[3];
-	coord_centroid[0] = (coord1[0] + coord2[0] + coord3[0]) / 3;
-	coord_centroid[1] = (coord1[1] + coord2[1] + coord3[1]) / 3;
-	coord_centroid[2] = (coord1[2] + coord2[2] + coord3[2]) / 3;
-
-	//float coord_centroid[3] = { -0.0085290000, -0.0348879993, -0.0362650007 };
+	float coord_centroid[3] = { (coord1[0] + coord2[0] + coord3[0]) / 3,
+								(coord1[1] + coord2[1] + coord3[1]) / 3,
+								(coord1[2] + coord2[2] + coord3[2]) / 3 };
 
 	float sigma_vertices[3] = {0};
 	float sigma_centroid;
@@ -157,22 +157,20 @@ void HoleFiller::refine(int idx1 , int idx2 ,int idx3)
 	
 	float scale = sqrt(2.0);
 
-	float temp1 = scale * mesh->distanceBetween(coord_centroid , coord1);
-	float temp2 = scale * mesh->distanceBetween(coord_centroid , coord2);
-	float temp3 = scale * mesh->distanceBetween(coord_centroid , coord3);
+	float temp1 = scale * mesh->distanceBetween(coord_centroid, v1->coords);
+	float temp2 = scale * mesh->distanceBetween(coord_centroid, v2->coords);
+	float temp3 = scale * mesh->distanceBetween(coord_centroid, v3->coords);
 	if( ( temp1 > sigma_vertices[0] && temp1 > sigma_centroid) ||
 		(temp2 > sigma_vertices[1] && temp2 > sigma_centroid) ||
 		(temp3 > sigma_vertices[2] && temp3 > sigma_centroid) )
 	{
 		int idx_centroid = mesh->addVertex(coord_centroid);
-		mesh->removeTriangle(idx1, idx2, idx3);
-		//mesh->addTriangle(idx3, idx2, idx1);
 
-		//cout << "split " << idx1 << " " << idx2 << " " << idx3 << " *" << idx_centroid << endl;
+		mesh->removeTriangle(idx1, idx2, idx3);
 
 		mesh->addTriangle(idx1, idx_centroid, idx3);
-		mesh->addTriangle(idx3, idx_centroid, idx2);
-		mesh->addTriangle(idx2, idx_centroid, idx1);
+		mesh->addTriangle(idx2, idx_centroid, idx3);
+		mesh->addTriangle(idx1, idx_centroid, idx2);
 	}
 }
 

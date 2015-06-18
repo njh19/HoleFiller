@@ -78,6 +78,16 @@ void Mesh::addTriangle(int v1i, int v2i, int v3i)
 		addEdge(v2i, v3i);
 }
 
+bool Mesh::triangleExists(int v1i, int v2i, int v3i) {
+	int idx = -1;
+	for (int i = 0; i < tris.size(); i++) {
+		if (tris[i]->v1i == v1i && tris[i]->v2i == v2i && tris[i]->v3i == v3i) {
+			idx = tris[i]->idx;
+		}
+	}
+	return idx != -1;
+}
+
 void Mesh::removeTriangle(int v1i, int v2i, int v3i)
 {
 	int idx = -1;
@@ -90,6 +100,7 @@ void Mesh::removeTriangle(int v1i, int v2i, int v3i)
 
 	if (idx == -1) {
 		cout << "no such triangle " << endl;
+		return;
 	}
 
 	for (int i = 0; i < verts[v1i]->triList.size(); i++) {
@@ -116,6 +127,21 @@ void Mesh::removeTriangle(int v1i, int v2i, int v3i)
 
 	if (!makeVertsUnneighbors(v2i, v3i))
 		removeEdge(v2i, v3i);
+}
+
+void Mesh::splitTriangle(int idx) {
+	float coord_centroid[3] = {
+		(verts[tris[idx]->v1i]->coords[0] + verts[tris[idx]->v2i]->coords[0] + verts[tris[idx]->v3i]->coords[0]) / 3,
+		(verts[tris[idx]->v1i]->coords[1] + verts[tris[idx]->v2i]->coords[1] + verts[tris[idx]->v3i]->coords[1]) / 3,
+		(verts[tris[idx]->v1i]->coords[2] + verts[tris[idx]->v2i]->coords[2] + verts[tris[idx]->v3i]->coords[2]) / 3 };
+
+	int idx_centroid = addVertex(coord_centroid);
+
+	removeTriangle(verts[tris[idx]->v1i]->idx, verts[tris[idx]->v2i]->idx, verts[tris[idx]->v3i]->idx);
+
+	addTriangle(verts[tris[idx]->v3i]->idx, idx_centroid, verts[tris[idx]->v1i]->idx);
+	addTriangle(verts[tris[idx]->v3i]->idx, idx_centroid, verts[tris[idx]->v2i]->idx);
+	addTriangle(verts[tris[idx]->v1i]->idx, idx_centroid, verts[tris[idx]->v2i]->idx);
 }
 
 bool Mesh::makeVertsNeighbors(int v, int w)
