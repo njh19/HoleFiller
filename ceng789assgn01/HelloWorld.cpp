@@ -26,7 +26,7 @@ int main(int, char ** argv)
 	SoSeparator* generalShape = new SoSeparator();
 
 	int question = 4;
-	char* filename = "C:\\developer\\bunny_with_holes.off";
+	char* filename = "bunny_with_holes.off";
 
 	Mesh * m = new Mesh();
 	m->loadOff(filename);
@@ -34,11 +34,11 @@ int main(int, char ** argv)
 	/*HoleFiller hFiller(*m);
 	hFiller.fillHoles();*/
 
-	for (int i = 1; i < 3; i++) {
+	for (int i = 10; i < 12; i++) {
 
-		m->splitTriangle(i);
+		//m->splitTriangle(i);
 
-		/*Triangle *tri = m->tris[10];
+		Triangle *tri = m->tris[i];
 
 		float coord_centroid[3] = {
 			(m->verts[tri->v1i]->coords[0] + m->verts[tri->v2i]->coords[0] + m->verts[tri->v3i]->coords[0]) / 3,
@@ -53,7 +53,7 @@ int main(int, char ** argv)
 		m->addTriangle(m->verts[tri->v2i]->idx, m->verts[tri->v3i]->idx, idx_centroid);
 		m->addTriangle(m->verts[tri->v1i]->idx, m->verts[tri->v2i]->idx, idx_centroid);
 
-		m->removeTriangle(m->verts[tri->v1i]->idx, m->verts[tri->v2i]->idx, m->verts[tri->v3i]->idx);*/
+		m->removeTriangle(m->verts[tri->v1i]->idx, m->verts[tri->v2i]->idx, m->verts[tri->v3i]->idx);
 	}
 
 
