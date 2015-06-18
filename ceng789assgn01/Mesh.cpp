@@ -54,14 +54,23 @@ void Mesh::loadOff(char* meshFile)
 int Mesh::addVertex(float* coords)
 {
 	//cout << "adding vertex : " << coords[0] << " " << coords[1] << " " << coords[2] << endl;
-	int idx = (int) verts.size();
+	int idx;
+	if (verts.size() == 0)
+		idx = 0;
+	else
+		idx = (int) verts[verts.size()-1]->idx + 1;
 	verts.push_back(new Vertex(idx, coords));
 	return idx;
 }
 
 void Mesh::addTriangle(int v1i, int v2i, int v3i)
 {
-	int idx = (int)tris.size();
+	int idx;
+	if (tris.size() == 0)
+		idx = 0;
+	else
+		idx = (int)tris[tris.size() - 1]->idx + 1;
+
 	tris.push_back(new Triangle(idx, v1i, v2i, v3i));
 
 	verts[v1i]->triList.push_back(idx);
@@ -130,18 +139,22 @@ void Mesh::removeTriangle(int v1i, int v2i, int v3i)
 }
 
 void Mesh::splitTriangle(int idx) {
+	Triangle *tri = tris[10];
+
 	float coord_centroid[3] = {
-		(verts[tris[idx]->v1i]->coords[0] + verts[tris[idx]->v2i]->coords[0] + verts[tris[idx]->v3i]->coords[0]) / 3,
-		(verts[tris[idx]->v1i]->coords[1] + verts[tris[idx]->v2i]->coords[1] + verts[tris[idx]->v3i]->coords[1]) / 3,
-		(verts[tris[idx]->v1i]->coords[2] + verts[tris[idx]->v2i]->coords[2] + verts[tris[idx]->v3i]->coords[2]) / 3 };
+		(verts[tri->v1i]->coords[0] + verts[tri->v2i]->coords[0] + verts[tri->v3i]->coords[0]) / 3,
+		(verts[tri->v1i]->coords[1] + verts[tri->v2i]->coords[1] + verts[tri->v3i]->coords[1]) / 3,
+		(verts[tri->v1i]->coords[2] + verts[tri->v2i]->coords[2] + verts[tri->v3i]->coords[2]) / 3 };
 
 	int idx_centroid = addVertex(coord_centroid);
 
-	removeTriangle(verts[tris[idx]->v1i]->idx, verts[tris[idx]->v2i]->idx, verts[tris[idx]->v3i]->idx);
+	cout << coord_centroid[0] << " " << coord_centroid[1] << " " << coord_centroid[2] << " " << idx_centroid << endl;
 
-	addTriangle(verts[tris[idx]->v3i]->idx, idx_centroid, verts[tris[idx]->v1i]->idx);
-	addTriangle(verts[tris[idx]->v3i]->idx, idx_centroid, verts[tris[idx]->v2i]->idx);
-	addTriangle(verts[tris[idx]->v1i]->idx, idx_centroid, verts[tris[idx]->v2i]->idx);
+	addTriangle(verts[tri->v3i]->idx, verts[tri->v1i]->idx, idx_centroid);
+	addTriangle(verts[tri->v2i]->idx, verts[tri->v3i]->idx, idx_centroid);
+	addTriangle(verts[tri->v1i]->idx, verts[tri->v2i]->idx, idx_centroid);
+
+	removeTriangle(verts[tri->v1i]->idx, verts[tri->v2i]->idx, verts[tri->v3i]->idx);
 }
 
 bool Mesh::makeVertsNeighbors(int v, int w)
@@ -182,7 +195,12 @@ float Mesh::distanceBetween(float* a, float* b)
 
 void Mesh::addEdge(int a, int b)
 {
-	int idx = (int)edges.size();
+	int idx;
+	if (edges.size() == 0)
+		idx = 0;
+	else
+		idx = (int)edges[edges.size() - 1]->idx + 1;
+
 	edges.push_back(new Edge(idx, a, b, distanceBetween(verts[a]->coords, verts[b]->coords)));
 
 	verts[a]->edgeList.push_back(idx);

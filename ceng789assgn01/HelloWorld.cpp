@@ -34,24 +34,26 @@ int main(int, char ** argv)
 	/*HoleFiller hFiller(*m);
 	hFiller.fillHoles();*/
 
-	for (int i = 10; i < 11; i++) {
+	for (int i = 1; i < 3; i++) {
 
-		//m->splitTriangle(i);
+		m->splitTriangle(i);
 
-		//Triangle *tri = m->tris[i];
+		/*Triangle *tri = m->tris[10];
 
 		float coord_centroid[3] = {
-			(m->verts[m->tris[i]->v1i]->coords[0] + m->verts[m->tris[i]->v2i]->coords[0] + m->verts[m->tris[i]->v3i]->coords[0]) / 3,
-			(m->verts[m->tris[i]->v1i]->coords[1] + m->verts[m->tris[i]->v2i]->coords[1] + m->verts[m->tris[i]->v3i]->coords[1]) / 3,
-			(m->verts[m->tris[i]->v1i]->coords[2] + m->verts[m->tris[i]->v2i]->coords[2] + m->verts[m->tris[i]->v3i]->coords[2]) / 3 };
+			(m->verts[tri->v1i]->coords[0] + m->verts[tri->v2i]->coords[0] + m->verts[tri->v3i]->coords[0]) / 3,
+			(m->verts[tri->v1i]->coords[1] + m->verts[tri->v2i]->coords[1] + m->verts[tri->v3i]->coords[1]) / 3,
+			(m->verts[tri->v1i]->coords[2] + m->verts[tri->v2i]->coords[2] + m->verts[tri->v3i]->coords[2]) / 3 };
 
 		int idx_centroid = m->addVertex(coord_centroid);
 
-		m->removeTriangle(m->verts[m->tris[i]->v1i]->idx, m->verts[m->tris[i]->v2i]->idx, m->verts[m->tris[i]->v3i]->idx);
+		cout << coord_centroid[0] << " " << coord_centroid[1] << " " << coord_centroid[2]  << " " << idx_centroid << endl;
 
-		m->addTriangle(m->verts[m->tris[i]->v3i]->idx, idx_centroid, m->verts[m->tris[i]->v1i]->idx);
-		m->addTriangle(m->verts[m->tris[i]->v3i]->idx, idx_centroid, m->verts[m->tris[i]->v2i]->idx);
-		m->addTriangle(m->verts[m->tris[i]->v1i]->idx, idx_centroid, m->verts[m->tris[i]->v2i]->idx);
+		m->addTriangle(m->verts[tri->v3i]->idx, m->verts[tri->v1i]->idx, idx_centroid);
+		m->addTriangle(m->verts[tri->v2i]->idx, m->verts[tri->v3i]->idx, idx_centroid);
+		m->addTriangle(m->verts[tri->v1i]->idx, m->verts[tri->v2i]->idx, idx_centroid);
+
+		m->removeTriangle(m->verts[tri->v1i]->idx, m->verts[tri->v2i]->idx, m->verts[tri->v3i]->idx);*/
 	}
 
 
