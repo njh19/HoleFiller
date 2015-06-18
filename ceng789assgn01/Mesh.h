@@ -42,20 +42,15 @@ public:
 
 	void loadOff(char* fName);
 	void createCube(float sideLength);
-	void printGeodesicDistanceMatrix(); /* new */
-	vector<int> shortestPath(int source, int target); /* new */
-	vector<int> shortestDistSet(int source); /* new */
-	vector<int> farthestPtsSet(); /* new */
-	vector<int> averageGeodesicDescriptor(); /* new */
-private:
+
+	float distanceBetween(float* a, float* b);
+	int addVertex(float* coords);
+	void addTriangle(int v1i, int v2i, int v3i);
+	void removeTriangle(int v1i, int v2i, int v3i);
+	bool makeVertsNeighbors(int v, int w);
+	bool makeVertsUnneighbors(int v, int w);
+	void addEdge(int a, int b);
+	void removeEdge(int a, int b);
 
 	char* filename; /* new */
-
-	void addVertex(float* coords);
-	void addTriangle(int v1i, int v2i, int v3i);
-	bool makeVertsNeighbors(int v, int w);
-	void addEdge(int a, int b);
-	int shortestDistTotal(int idx); /* new */
-	int shortestDistTotalF(int idx); /* new */
-	int farthestTo(vector<int> vertices); /* new */
 };
