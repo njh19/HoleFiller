@@ -26,7 +26,7 @@ int main(int, char ** argv)
 	SoSeparator* generalShape = new SoSeparator();
 
 	int question = 4;
-	char* filename = "bunny_with_holes.off";
+	char* filename = "input/bunny_with_holes.off";
 
 	Mesh * m = new Mesh();
 	m->loadOff(filename);
